@@ -181,6 +181,7 @@
       <root url="file://$PROJECT_DIR$/../zepher-bansaku/workers/backup/node_modules/milkcocoa/node_modules/mqtt/node_modules/commist/node_modules/.bin" />
       <root url="file://$PROJECT_DIR$/../../gorilla/sessions/.git" />
       <root url="file://$PROJECT_DIR$/../wotageishika-backend/client/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-optipng/node_modules/optipng-bin/node_modules/bin-wrapper/node_modules/bin-check/node_modules/.bin" />
+      <root url="file://$PROJECT_DIR$/.git" />
       <root url="file://$PROJECT_DIR$/../wotageishika-backend/client/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-optipng/node_modules/optipng-bin/node_modules/bin-wrapper/node_modules/download/node_modules/gulp-decompress/node_modules/decompress/node_modules/decompress-unzip/node_modules/.bin" />
       <root url="file://$PROJECT_DIR$/../../kr/godep/Godeps/_workspace" />
       <root url="file://$PROJECT_DIR$/../wotageishika-backend/client/node_modules/grunt-google-cdn/node_modules/google-cdn/node_modules/bower/node_modules/decompress-zip/node_modules/touch/node_modules/.bin" />
