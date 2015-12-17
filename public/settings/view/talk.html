@@ -1,0 +1,23 @@
+<div ng-cloak>
+    <md-content>
+        <md-list>
+            <md-subheader class="md-no-sticky">Talks</md-subheader>
+            <md-list-item ng-repeat="talk in talks">
+                <div class="md-list-item-text" layout="row">
+                    <a ui-sref="detail({id:talk.id})" style="text-decoration:none;">{{ talk.title }}</a>
+                </div>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+            </md-subheader>
+        </md-list>
+        <div layout="row" layout-align="center center">
+            <md-button ng-click="prev()">Previous</md-button>
+            <md-button ng-click="next()">Next</md-button>
+        </div>
+        <section layout="row" layout-align="end center" layout-sm="column" layout-wrap>
+            <md-button ng-click="newTalk()" class="md-fab" aria-label="Post question">
+                <md-icon md-svg-src="img/add.svg"></md-icon>
+            </md-button>
+        </section>
+    </md-content>
+</div>

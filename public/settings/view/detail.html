@@ -1,0 +1,63 @@
+<div ng-cloak>
+    <md-content>
+        <md-data-table-toolbar>
+            <h2 class="md-title">{{ talk.title }}</h2>
+        </md-data-table-toolbar>
+
+        <md-data-table-container>
+            <table md-data-table md-progress="deferred">
+                <thead md-order="query.order" md-trigger="onOrderChange">
+                <tr>
+                    <th numeric name="ID" order-by="tweet.id"></th>
+                    <th name="BotName" order-by="tweet.bot.name"></th>
+                    <th name="Bot" order-by="bots.bot"></th>
+                    <th name="Text" order-by="tweet.text"></th>
+                    <th numeric type="number" name="Sequence" order-by="tweet.sequence"></th>
+                    <th name="Add"></th>
+                    <th name="Update"></th>
+                    <th name="Delete"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr md-auto-select ng-repeat="tweet in tweets">
+                    <td>{{ tweet.id }}</td>
+                    <td>{{ tweet.bot.name }}</td>
+                    <td>
+                        <md-input-container>
+                            <label>Bot</label>
+                            <md-select ng-model="tweet.botId" >
+                                <md-option ng-repeat="bot in bots" value="{{ bot.id }}">
+                                    {{ bot.name }}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </td>
+                    <td>
+                        <md-input-container class="md-block">
+                            <label>Text</label>
+                            <textarea ng-model="tweet.text" type="text" md-maxlength="140" ></textarea>
+                        </md-input-container>
+                    </td>
+                    <td>
+                        <md-input-container>
+                            <label>Sequence</label>
+                            <input ng-model="tweet.sequence" type="number">
+                        </md-input-container>
+                    </td>
+                    <td>
+                        <md-button md-no-ink class="md-primary" ng-disabled="tweet.id" ng-click="add($index, tweet)">Add</md-button>
+                    </td>
+                    <td>
+                        <md-button md-no-ink class="md-primary" ng-disabled="!tweet.id" ng-click="update($index, tweet)">Update</md-button>
+                    </td>
+                    <td>
+                        <md-button md-no-ink class="md-warn" ng-disabled="!tweet.id" ng-click="delete($index, tweet)">Delete</md-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </md-data-table-container>
+
+        <md-data-table-pagination md-limit="limit" md-page="page" md-trigger="onPaginationChange"></md-data-table-pagination>
+    </md-content>
+</div>

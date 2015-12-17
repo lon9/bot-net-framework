@@ -1,0 +1,26 @@
+<md-dialog aria-label="Post Question" ng-clock>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>New Talk</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px; ">
+            <div class="md-dialog-content">
+                <p>Please input title</p>
+                <md-input-container>
+                    <label>Title</label>
+                    <input ng-model="newTalk.title" md-autofocus>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="post(newTalk)" style="margin-right:20px;">Post</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
