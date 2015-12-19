@@ -80,7 +80,6 @@ func main(){
 			m.Post("", binding.Bind(Bot{}), CreateBot)
 			m.Put("", binding.Bind(Bot{}), UpdateBot)
 			m.Delete("/:id", DeleteBot)
-			m.Get("/search", )
 		})
 		m.Group("/talk", func(r martini.Router) {
 			m.Get("", IndexTalk)
