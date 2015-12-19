@@ -25,3 +25,4 @@ _testmain.go
 *.prof
 
 bot-net-framework
+bower_components

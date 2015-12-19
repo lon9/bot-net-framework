@@ -6,6 +6,7 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/go-martini/martini"
 	"net/http"
+"fmt"
 )
 
 type Bot struct  {

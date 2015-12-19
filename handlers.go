@@ -7,7 +7,8 @@ import (
 	"net/url"
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/martini-contrib/sessions"
-	"fmt"
+	"time"
+	"encoding/json"
 )
 
 
@@ -69,7 +70,7 @@ func TwitterCallback(r render.Render, s sessions.Session, req *http.Request, db 
 
 }
 
-func StartTalk(r render.Render, req *http.Request, db gorm.DB){
+func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db gorm.DB){
 	talkName := req.FormValue("talkName")
 	if talkName == ""{
 		r.JSON(400, Error{400, "talkName must be set."})
@@ -81,24 +82,47 @@ func StartTalk(r render.Render, req *http.Request, db gorm.DB){
 	db.Model(&talk).Order("sequence", true).Related(&talk.Tweets)
 	for i, _ := range talk.Tweets{
 		db.Model(&talk.Tweets[i]).Related(&talk.Tweets[i].Bot)
-		fmt.Println(talk.Tweets[i].Bot)
 	}
 
 	if talk.ID == 0{
 		r.JSON(400, Error{404, "Talk not found."})
 		return
 	}
+
 	talkController := NewTalkController(talk)
+
+	// Streaming response.
+	hj, _:= res.(http.Hijacker)
+	conn, bufrw, err := hj.Hijack()
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()
+
+	bufrw.WriteString("HTTP/1.1 200 OK\r\n")
+	bufrw.WriteString("Content-Type: application/json\r\n")
+	bufrw.WriteString("Cache-Control: no-cache\r\n")
+	bufrw.WriteString("\r\n")
+	bufrw.Flush()
+
+	enc := json.NewEncoder(bufrw)
+
 
 	// Start talk
 	for  range talk.Tweets{
 		tweet, err := talkController.PostOne()
 		if err != nil {
-			panic(err)
+			break
 		}
 
-		r.JSON(200, tweet)
+		enc.Encode(tweet)
+		bufrw.Flush()
+		time.Sleep(2*time.Second)
 	}
+
+	// End of response.
+	bufrw.WriteString("EOR")
+	bufrw.Flush()
 
 	r.JSON(204, nil)
 }

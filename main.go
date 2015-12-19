@@ -55,7 +55,7 @@ func main(){
 
 	// Migrate database
 	// Debug
-	db.DropTable(&Talk{}, &Bot{}, &Tweet{})
+	//db.DropTable(&Talk{}, &Bot{}, &Tweet{})
 	db.AutoMigrate(&Talk{}, &Bot{}, &Tweet{})
 	m.Map(db)
 
@@ -80,6 +80,7 @@ func main(){
 			m.Post("", binding.Bind(Bot{}), CreateBot)
 			m.Put("", binding.Bind(Bot{}), UpdateBot)
 			m.Delete("/:id", DeleteBot)
+			m.Get("/search", )
 		})
 		m.Group("/talk", func(r martini.Router) {
 			m.Get("", IndexTalk)
