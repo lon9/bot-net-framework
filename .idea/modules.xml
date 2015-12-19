@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bot-net.iml" filepath="$PROJECT_DIR$/bot-net.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bot-net-framework.iml" filepath="$PROJECT_DIR$/bot-net-framework.iml" />
     </modules>
   </component>
 </project>

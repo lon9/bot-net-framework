@@ -5,6 +5,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Go 1.5.1" jdkType="Go SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="GOPATH &lt;bot-net&gt;" level="project" />
+    <orderEntry type="library" name="GOPATH &lt;bot-net-framework&gt;" level="project" />
   </component>
 </module>

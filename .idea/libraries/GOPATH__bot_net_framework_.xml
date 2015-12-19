@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="GOPATH &lt;bot-net&gt;">
+  <library name="GOPATH &lt;bot-net-framework&gt;">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/../../../golang.org" />
       <root url="file://$PROJECT_DIR$/../../../9fans.net" />
@@ -177,7 +177,6 @@
       <root url="file://$PROJECT_DIR$/../../tools/godep/.git" />
       <root url="file://$PROJECT_DIR$/../wotageishika-backend/client/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-gifsicle/node_modules/gifsicle/node_modules/bin-build/node_modules/download/node_modules/gulp-decompress/node_modules/gulp-util/node_modules/.bin" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/cmd/cover/testdata" />
-      <root url="file://$PROJECT_DIR$/../bot-net/.idea" />
       <root url="file://$PROJECT_DIR$/../zepher-bansaku/workers/backup/node_modules/milkcocoa/node_modules/mqtt/node_modules/commist/node_modules/.bin" />
       <root url="file://$PROJECT_DIR$/../../gorilla/sessions/.git" />
       <root url="file://$PROJECT_DIR$/../wotageishika-backend/client/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-optipng/node_modules/optipng-bin/node_modules/bin-wrapper/node_modules/bin-check/node_modules/.bin" />

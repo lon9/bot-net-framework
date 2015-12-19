@@ -14,6 +14,7 @@ angular.module('bot-net')
     $scope.bots = BotService.query();
 
     $scope.add = function(index, tweet){
+        if(!validTweet(tweet)){return;}
         tweet.botId = parseInt(tweet.botId);
         TweetService.save({}, tweet, function(data){
             $scope.tweets[index] = data;
@@ -28,6 +29,9 @@ angular.module('bot-net')
     };
 
     $scope.update = function(index, tweet){
+        if(!validTweet(tweet)){return;}
+        tweet.bot = null;
+        tweet.botId = parseInt(tweet.botId);
         TweetService.update({}, tweet, function(data){
             $scope.tweets[index] = data;
         });
@@ -46,6 +50,11 @@ angular.module('bot-net')
             });
         });
     };
+
+    function validTweet(tweet){
+        console.log(tweet.text);
+        return !(tweet.botId == null || tweet.text == "");
+    }
 
 
 });

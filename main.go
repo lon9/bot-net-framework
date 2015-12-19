@@ -95,6 +95,8 @@ func main(){
 			m.Put("", binding.Bind(Tweet{}), UpdateTweet)
 			m.Delete("/:id", DeleteTweet)
 		})
+
+		m.Get("/", StartTalk)
 	})
 
 

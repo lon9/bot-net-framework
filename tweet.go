@@ -14,9 +14,8 @@ type Tweet struct  {
 	UpdatedAt time.Time `json:"updatedAt"`
 	BotID     int `json:"botId" sql:"index"`
 	Bot       Bot `json:"bot"`
-	TalkID   int `json:"talkId"`
+	TalkID   int `json:"talkId" sql:"index"`
 	Sequence  int `json:"sequence"`
-	Bots      []Bot `json:"targets" gorm:"many2many:belonging_bots;"`
 	Text      string `json:"text" sql:"type:text"`
 }
 
@@ -27,6 +26,7 @@ func IndexTweet(r render.Render, req *http.Request, db gorm.DB){
 	talkId := req.FormValue("talkId")
 	if talkId == "" {
 		r.JSON(404, Error{404, "Talk not found"})
+		return
 	}
 
 	var tweets Tweets
@@ -43,6 +43,7 @@ func GetTweet(r render.Render, params martini.Params, db gorm.DB){
 	db.First(&Tweet, id)
 	if Tweet.ID == 0{
 		r.JSON(404, Error{404, "Tweet was not found."})
+		return
 	}
 	r.JSON(200, Tweet)
 }

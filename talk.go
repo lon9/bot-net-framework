@@ -26,6 +26,7 @@ func IndexTalk(r render.Render, req *http.Request, db gorm.DB){
 	maxResults, err := strconv.Atoi(rawMaxResults)
 	if err != nil {
 		r.JSON(400, Error{400, "page and maxResults must be integer."})
+		return
 	}
 
 	limit = maxResults
@@ -42,6 +43,7 @@ func GetTalk(r render.Render, params martini.Params, db gorm.DB){
 	db.First(&talk, id)
 	if talk.ID == 0{
 		r.JSON(404, Error{404, "Talk was not found."})
+		return
 	}
 	r.JSON(200, talk)
 }

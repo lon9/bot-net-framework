@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/martini-contrib/sessions"
+	"fmt"
 )
 
 
@@ -66,4 +67,38 @@ func TwitterCallback(r render.Render, s sessions.Session, req *http.Request, db 
 
 	r.HTML(200, "callback", bot)
 
+}
+
+func StartTalk(r render.Render, req *http.Request, db gorm.DB){
+	talkName := req.FormValue("talkName")
+	if talkName == ""{
+		r.JSON(400, Error{400, "talkName must be set."})
+		return
+	}
+
+	var talk Talk
+	db.Where("title = ?", talkName).First(&talk)
+	db.Model(&talk).Order("sequence", true).Related(&talk.Tweets)
+	for i, _ := range talk.Tweets{
+		db.Model(&talk.Tweets[i]).Related(&talk.Tweets[i].Bot)
+		fmt.Println(talk.Tweets[i].Bot)
+	}
+
+	if talk.ID == 0{
+		r.JSON(400, Error{404, "Talk not found."})
+		return
+	}
+	talkController := NewTalkController(talk)
+
+	// Start talk
+	for  range talk.Tweets{
+		tweet, err := talkController.PostOne()
+		if err != nil {
+			panic(err)
+		}
+
+		r.JSON(200, tweet)
+	}
+
+	r.JSON(204, nil)
 }
