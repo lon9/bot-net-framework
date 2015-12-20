@@ -18,6 +18,7 @@ type Bot struct  {
 	AccessToken string `json:"-"`
 	AccessTokenSecret string `json:"-"`
 	TwitterId int64 `json:"twitterId" sql:"unique"`
+	IconURL string `json:"iconUrl"`
 }
 
 // Bots is array of Bot

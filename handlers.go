@@ -63,6 +63,7 @@ func TwitterCallback(r render.Render, s sessions.Session, req *http.Request, db 
 		Name:me.Name,
 		TwitterId:me.Id,
 		ScreenName:me.ScreenName,
+		IconURL:me.ProfileImageUrlHttps,
 	}
 
 	// Insert new bot

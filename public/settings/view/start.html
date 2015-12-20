@@ -3,6 +3,7 @@
         <md-list>
             <md-subheader class="md-no-sticky">{{ talkName }}</md-subheader>
             <md-list-item class="md-3-line" ng-repeat="tweet in tweets">
+                <img ng-src="{{ tweet.bot.iconUrl }}" class="md-avatar" alt="{{ tweet.bot.name }}"/>
                 <div class="md-list-item-text" layout="column">
                     <h4>{{ tweet.bot.name }}</h4>
                     <p>{{ tweet.text }}</p>

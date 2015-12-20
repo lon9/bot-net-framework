@@ -13,7 +13,7 @@ go build
 ./bot-net-framework [OPTION]
 ```
 
-Open browser and access port number we decided in options.
+Open browser and access the port number we decided in options.
 
 ##Optinons
 
