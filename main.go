@@ -106,12 +106,12 @@ func main(){
 func parseFlags() *Options{
 	var opts Options
 	parser := flags.NewParser(&opts, flags.Default)
-	parser.Name = "bot-net"
+	parser.Name = "bot-net-framework"
 	parser.Usage = "[OPTIONS]"
 	_, err := parser.Parse()
 
 	if err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 
 	if opts.Port == 0{
