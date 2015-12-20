@@ -29,7 +29,7 @@
                             <label>Bot</label>
                             <md-select ng-model="tweet.botId" >
                                 <md-option ng-repeat="bot in bots" value="{{ bot.id }}">
-                                    {{ bot.name }}
+                                    {{ bot.name }}:{{ bot.screenName }}
                                 </md-option>
                             </md-select>
                         </md-input-container>
