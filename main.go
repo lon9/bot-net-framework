@@ -34,7 +34,6 @@ func main(){
 		IndentJSON: true,
 		IndentXML: true,
 	}))
-	m.Use(martini.Logger())
 	store := sessions.NewCookieStore([]byte("secret"))
 	m.Use(sessions.Sessions("session", store))
 
