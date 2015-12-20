@@ -1,6 +1,5 @@
 #Bot Net Framework
 
-##Description
 Bot Net Framework is not malware framework, it is "Twitter" Bot Net Framework.   
 We can create network of Twitter bots. This makes easy to communicate with bots.   
 All we have to do is just registering bots and configuring communications with Web UI, 
