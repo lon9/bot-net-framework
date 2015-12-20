@@ -60,7 +60,6 @@ angular.module('bot-net')
 
     //Validate tweet
     function validTweet(tweet){
-        console.log(tweet.text);
         return !(tweet.botId == null || tweet.text == "");
     }
 

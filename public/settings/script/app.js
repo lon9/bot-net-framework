@@ -18,5 +18,10 @@ angular.module('bot-net',
                 url: '/:id',
                 templateUrl: 'view/detail.html',
                 controller: 'DetailController'
+            })
+            .state('start', {
+                url: '/start/:talkName',
+                templateUrl: 'view/start.html',
+                controller: 'StartController'
             });
     });

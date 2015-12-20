@@ -96,6 +96,7 @@ func main(){
 		})
 
 		m.Get("/", StartTalk)
+		m.Get("/ws", StartTalkSocket)
 	})
 
 

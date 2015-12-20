@@ -8,7 +8,8 @@ import (
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/martini-contrib/sessions"
 	"time"
-	"encoding/json"
+	"github.com/gorilla/websocket"
+	"log"
 )
 
 
@@ -91,38 +92,57 @@ func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db g
 
 	talkController := NewTalkController(talk)
 
-	// Streaming response.
-	hj, _:= res.(http.Hijacker)
-	conn, bufrw, err := hj.Hijack()
-	if err != nil {
-		panic(err)
-	}
-	defer conn.Close()
-
-	bufrw.WriteString("HTTP/1.1 200 OK\r\n")
-	bufrw.WriteString("Content-Type: application/json\r\n")
-	bufrw.WriteString("Cache-Control: no-cache\r\n")
-	bufrw.WriteString("\r\n")
-	bufrw.Flush()
-
-	enc := json.NewEncoder(bufrw)
-
-
 	// Start talk
 	for  range talk.Tweets{
-		tweet, err := talkController.PostOne()
+		_, err := talkController.PostOne()
 		if err != nil {
 			break
 		}
-
-		enc.Encode(tweet)
-		bufrw.Flush()
-		time.Sleep(2*time.Second)
 	}
 
-	// End of response.
-	bufrw.WriteString("EOR")
-	bufrw.Flush()
+	r.JSON(200, talk)
+}
 
-	r.JSON(204, nil)
+func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, db gorm.DB){
+
+	ws, err := websocket.Upgrade(w, req, nil, 1024, 1024)
+	if _, ok := err.(websocket.HandshakeError); ok {
+		http.Error(w, "Not a websocket handshake", 400)
+		return
+	} else if err != nil {
+		log.Println(err)
+		return
+	}
+
+
+	talkName := req.FormValue("talkName")
+	if talkName == ""{
+		r.JSON(400, Error{400, "talkName must be set."})
+		return
+	}
+
+	var talk Talk
+	db.Where("title = ?", talkName).First(&talk)
+	db.Model(&talk).Order("sequence", true).Related(&talk.Tweets)
+	for i, _ := range talk.Tweets{
+		db.Model(&talk.Tweets[i]).Related(&talk.Tweets[i].Bot)
+	}
+
+	if talk.ID == 0{
+		r.JSON(400, Error{404, "Talk not found."})
+		return
+	}
+
+	talkController := NewTalkController(talk)
+
+	for range talk.Tweets{
+		tweet, err := talkController.PostOne()
+		if err != nil {
+			return
+		}
+		if err := ws.WriteJSON(tweet); err !=nil{
+			r.JSON(400, Error{400,"Cant send message."})
+		}
+		time.Sleep(1*time.Second)
+	}
 }
