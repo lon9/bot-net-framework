@@ -3,11 +3,13 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 )
 
+// TalkController is controller of talk.
 type TalkController struct {
 	Talk Talk
 	Seq int
 }
 
+// NewTalkController is constructor of TalkController.
 func NewTalkController(talk Talk)*TalkController{
 	return &TalkController{
 		Talk:talk,
@@ -15,7 +17,7 @@ func NewTalkController(talk Talk)*TalkController{
 	}
 }
 
-
+// PostOne posts one tweet and inclement sequence.
 func (tc *TalkController) PostOne() (Tweet, error){
 	api := anaconda.NewTwitterApi(tc.Talk.Tweets[tc.Seq].Bot.AccessToken, tc.Talk.Tweets[tc.Seq].Bot.AccessTokenSecret)
 

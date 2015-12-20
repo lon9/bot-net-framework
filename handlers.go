@@ -12,12 +12,12 @@ import (
 	"log"
 )
 
-
+// Index returns top page.
 func Index(r render.Render){
 	r.HTML(200, "index", "")
 }
 
-
+// TwitterLogin login twitter with OAuth.
 func TwitterLogin(r render.Render, s sessions.Session, req *http.Request){
 	url, tmpCred, err := anaconda.AuthorizationURL("http://"+ req.Host + "/twitter/callback")
 	if err != nil{
@@ -28,6 +28,7 @@ func TwitterLogin(r render.Render, s sessions.Session, req *http.Request){
 	r.Redirect(url, 302)
 }
 
+// TwitterCallback is callback of Twitter login.
 func TwitterCallback(r render.Render, s sessions.Session, req *http.Request, db gorm.DB){
 
 	// Make instance of Twitter's credentials
@@ -71,6 +72,7 @@ func TwitterCallback(r render.Render, s sessions.Session, req *http.Request, db 
 
 }
 
+// StartTalk starts talk with Json based API.
 func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db gorm.DB){
 	talkName := req.FormValue("talkName")
 	if talkName == ""{
@@ -103,6 +105,7 @@ func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db g
 	r.JSON(200, talk)
 }
 
+// StartTalkSocket is websocket for talking in Web UI.
 func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, db gorm.DB){
 
 	ws, err := websocket.Upgrade(w, req, nil, 1024, 1024)

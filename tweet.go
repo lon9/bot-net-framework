@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Tweet is object for Tweet.
 type Tweet struct  {
 	ID        int `json:"id" gorm:"primary_key"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -19,8 +20,10 @@ type Tweet struct  {
 	Text      string `json:"text" sql:"type:text"`
 }
 
+// Tweets is array of Tweet.
 type Tweets []Tweet
 
+// IndexTweet returns array of Tweet.
 func IndexTweet(r render.Render, req *http.Request, db gorm.DB){
 
 	talkId := req.FormValue("talkId")
@@ -37,6 +40,7 @@ func IndexTweet(r render.Render, req *http.Request, db gorm.DB){
 	r.JSON(200, tweets)
 }
 
+// GetTweet returns a Tweet.
 func GetTweet(r render.Render, params martini.Params, db gorm.DB){
 	id := params["id"]
 	var Tweet Tweet
@@ -48,12 +52,14 @@ func GetTweet(r render.Render, params martini.Params, db gorm.DB){
 	r.JSON(200, Tweet)
 }
 
+// CreateTweet inserts a tweet.
 func CreateTweet(r render.Render, db gorm.DB, tweet Tweet){
 	db.Create(&tweet)
 	db.Find(&tweet.Bot, tweet.BotID)
 	r.JSON(201, tweet)
 }
 
+// UpdateTweet updates a Tweet.
 func UpdateTweet(r render.Render, db gorm.DB, tweet Tweet){
 	tweet.UpdatedAt = time.Now()
 	db.Save(&tweet)
@@ -61,6 +67,7 @@ func UpdateTweet(r render.Render, db gorm.DB, tweet Tweet){
 	r.JSON(200, tweet)
 }
 
+// DeleteTweet deletes a Tweet.
 func DeleteTweet(r render.Render, params martini.Params, db gorm.DB){
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {

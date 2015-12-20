@@ -8,6 +8,7 @@ import (
 	"github.com/go-martini/martini"
 )
 
+// Talk is object for talks.
 type Talk struct  {
 	ID int `json:"id" gorm:"primary_key"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -16,8 +17,10 @@ type Talk struct  {
 	Tweets []Tweet `json:"tweets"`
 }
 
+// Talks is array of Talk.
 type Talks []Talk
 
+// IndexTalk returns array of Talk.
 func IndexTalk(r render.Render, req *http.Request, db gorm.DB){
 	limit := 40
 	offset := 0
@@ -37,6 +40,7 @@ func IndexTalk(r render.Render, req *http.Request, db gorm.DB){
 	r.JSON(200, talks)
 }
 
+// GetTalk returns a talk
 func GetTalk(r render.Render, params martini.Params, db gorm.DB){
 	id := params["id"]
 	var talk Talk
@@ -48,17 +52,20 @@ func GetTalk(r render.Render, params martini.Params, db gorm.DB){
 	r.JSON(200, talk)
 }
 
+// CreateTalk inserts talk to database.
 func CreateTalk(r render.Render, db gorm.DB, talk Talk){
 	db.Create(&talk)
 	r.JSON(201, talk)
 }
 
+// UpdateTalk updates a talk.
 func UpdateTalk(r render.Render, db gorm.DB, talk Talk){
 	talk.UpdatedAt = time.Now()
 	db.Save(&talk)
 	r.JSON(200, talk)
 }
 
+// DeleteTalk deletes a talk.
 func DeleteTalk(r render.Render, params martini.Params, db gorm.DB){
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
