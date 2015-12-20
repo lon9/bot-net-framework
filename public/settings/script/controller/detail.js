@@ -2,6 +2,8 @@ angular.module('bot-net')
 .controller('DetailController', function($scope, $stateParams, BotService, TalkService, TweetService){
     var talkId = $stateParams.id;
     $scope.talk = TalkService.get({id: talkId});
+
+    // Getting tweets of the talk
     $scope.tweets = TweetService.query({talkId:talkId}, function(){
         $scope.tweets.push({
                 id:0,
@@ -11,8 +13,11 @@ angular.module('bot-net')
                 bots:null
             });
     });
+
+    // Getting bots
     $scope.bots = BotService.query();
 
+    //Add tweet
     $scope.add = function(index, tweet){
         if(!validTweet(tweet)){return;}
         tweet.botId = parseInt(tweet.botId);
@@ -28,6 +33,7 @@ angular.module('bot-net')
         });
     };
 
+    //Update tweet
     $scope.update = function(index, tweet){
         if(!validTweet(tweet)){return;}
         tweet.bot = null;
@@ -37,6 +43,7 @@ angular.module('bot-net')
         });
     };
 
+    // Delete tweet
     $scope.delete = function(idnex, tweet){
         TweetService.remove({id:tweet.id}, {}, function(){
             $scope.tweets = TweetService.query({talkId:talkId}, function(){
@@ -51,6 +58,7 @@ angular.module('bot-net')
         });
     };
 
+    //Validate tweet
     function validTweet(tweet){
         console.log(tweet.text);
         return !(tweet.botId == null || tweet.text == "");

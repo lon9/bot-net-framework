@@ -4,16 +4,19 @@ angular.module('bot-net')
     var maxResults = 40;
     $scope.talks = TalkService.query({page:page, maxResults: maxResults});
 
+    //Prev page
     $scope.prev = function(){
        page--;
        $scope.talks = TalkService.query({page:page, maxResults:maxResults});
     };
 
+    //Next page
     $scope.next = function(){
         page++;
         $scope.talks = TalkService.query({page:page, maxResults:maxResults});
     };
 
+    // Add new talk
     $scope.newTalk = function(ev){
         $mdDialog.show({
             controller: NewTalkController,
