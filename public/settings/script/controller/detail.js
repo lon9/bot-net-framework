@@ -27,7 +27,7 @@ angular.module('bot-net')
                 id:0,
                 text:"",
                 talkId:parseInt(talkId, 10),
-                sequence:$scope.tweets.length+1,
+                sequence:data.sequence+1,
                 bots:null
             });
         });
