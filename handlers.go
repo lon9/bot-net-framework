@@ -10,6 +10,7 @@ import (
 	"time"
 	"github.com/gorilla/websocket"
 	"log"
+	"fmt"
 )
 
 // Index returns top page.
@@ -85,7 +86,9 @@ func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db g
 	db.Where("title = ?", talkName).First(&talk)
 	db.Model(&talk).Order("sequence", true).Related(&talk.Tweets)
 	for i, _ := range talk.Tweets{
-		db.Model(&talk.Tweets[i]).Related(&talk.Tweets[i].Bot)
+		for j, _ := range talk.Tweets{
+			db.Model(&talk.Tweets[i][j]).Related(&talk.Tweets[i][j].Bot)
+		}
 	}
 
 	if talk.ID == 0{
@@ -125,11 +128,30 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 		return
 	}
 
+	// Getting talk
 	var talk Talk
 	db.Where("title = ?", talkName).First(&talk)
-	db.Model(&talk).Order("sequence", true).Related(&talk.Tweets)
-	for i, _ := range talk.Tweets{
-		db.Model(&talk.Tweets[i]).Related(&talk.Tweets[i].Bot)
+
+	var tweets Tweets
+
+	// Getting tweet sorted by sequence.
+	db.Model(&talk).Order("sequence", true).Related(&tweets)
+	talk.Tweets = make([]Tweets, len(tweets))
+	index  := -1
+	prevSeq := 0
+	var prevBot Bot
+	for _, v := range tweets{
+		if v.Sequence == prevSeq {
+			v.Bot = prevBot
+			talk.Tweets[index] = append(talk.Tweets[index], v)
+		}else{
+			index++
+			db.Model(&v).Related(&prevBot)
+			v.Bot = prevBot
+			talk.Tweets[index] = make(Tweets, 0)
+			talk.Tweets[index] = append(talk.Tweets[index], v)
+			prevSeq = v.Sequence
+		}
 	}
 
 	if talk.ID == 0{
@@ -140,12 +162,14 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 	talkController := NewTalkController(talk)
 
 	for range talk.Tweets{
-		tweet, err := talkController.PostOne()
+		tweets, err := talkController.PostOne()
 		if err != nil {
 			return
 		}
-		if err := ws.WriteJSON(tweet); err !=nil{
-			r.JSON(400, Error{400,"Cant send message."})
+		for _, v := range tweets{
+			if err := ws.WriteJSON(v); err != nil{
+				r.JSON(400, Error{400,"Cant send message."})
+			}
 		}
 		time.Sleep(1*time.Second)
 	}
