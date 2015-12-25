@@ -10,7 +10,6 @@ import (
 	"time"
 	"github.com/gorilla/websocket"
 	"log"
-	"fmt"
 )
 
 // Index returns top page.
