@@ -14,7 +14,7 @@ type Talk struct  {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	Title string `json:"title" sql:"unique"`
-	Tweets []Tweet `json:"tweets"`
+	Tweets []Tweets `json:"tweets" sql:"-"`
 }
 
 // Talks is array of Talk.

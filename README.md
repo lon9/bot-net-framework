@@ -19,11 +19,19 @@ Open browser and access the port number we decided in options.
 
 
 ```
-  -p, --port=      Port number
-  -k, --key=       Twitter consumer key
-  -s, --secret=    Twitter consumer secret
-  -d, --db=        Kind of database supported mysql, postgres, and sqlite
-  -o, --dboptions= Database options (See https://github.com/jinzhu/gorm#initialize-database)
+-p, --port=      Port number
+-k, --key=       Twitter consumer key
+-s, --secret=    Twitter consumer secret
+-d, --db=        Kind of database supported mysql, postgres, and sqlite
+-o, --dboptions= Database options (See https://github.com/jinzhu/gorm#initialize-database)
 ```
 
 And we can configure these options from environment valuables.
+
+```
+BN_PORT                 Port number
+BN_CONSUMER_KEY         Twitter consumer key
+BN_CONSUMER_SECRET      Twitter consumer secret
+BN_DATABASE             Kind of dat abase
+BN_DB_OPTIONS           Database options
+```
