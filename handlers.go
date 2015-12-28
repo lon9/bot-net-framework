@@ -13,6 +13,7 @@ import (
 	"github.com/go-martini/martini"
 	"runtime"
 	"fmt"
+	"strconv"
 )
 
 // Index returns top page.
@@ -217,7 +218,13 @@ func DelTalkTweets(r render.Render, db gorm.DB, params martini.Params){
 func deleteTweets(tweet Tweet, resultCh chan Tweet, errCh chan error){
 	api := anaconda.NewTwitterApi(tweet.Bot.AccessToken, tweet.Bot.AccessTokenSecret)
 
-	_, err := api.DeleteTweet(tweet.TweetId, true)
+	tweetIdInt, err := strconv.ParseInt(tweet.TweetId, 10, 64)
+	if err != nil {
+		errCh <- err
+		return
+	}
+
+	_, err = api.DeleteTweet(tweetIdInt, true)
 	if err != nil {
 		errCh <- err
 		return

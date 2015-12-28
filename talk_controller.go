@@ -67,6 +67,6 @@ func postTweet(tweet Tweet, resultCh chan Tweet, errCh chan error) {
 		return
 	}
 	tweet.TweetId = result.IdStr
-	tweet.Bot = nil
+	tweet.Bot = Bot{}
 	resultCh <- tweet
 }
