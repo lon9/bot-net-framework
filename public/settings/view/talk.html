@@ -7,7 +7,7 @@
                 <div class="md-list-item-text" layout="row">
                     <a ui-sref="detail({id:talk.id})" style="text-decoration:none;">{{ talk.title }}</a>
                 </div>
-                <md-button class="md-secondary" ng-click="deleteTweet(talk.id)">Delete tweets</md-button>
+                <md-button class="md-secondary md-warn" ng-click="deleteTweet(talk.id)">Delete tweets</md-button>
                 <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
             </md-subheader>
