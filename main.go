@@ -97,7 +97,7 @@ func main(){
 
 		m.Get("/", StartTalk)
 		m.Get("/ws", StartTalkSocket)
-		m.Delete("/:talkId", DelTalkTweets)
+		m.Delete("/", DelTalkTweets)
 	})
 
 

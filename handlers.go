@@ -10,7 +10,6 @@ import (
 	"time"
 	"github.com/gorilla/websocket"
 	"log"
-	"github.com/go-martini/martini"
 	"runtime"
 	"fmt"
 	"strconv"
@@ -178,8 +177,8 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 	}
 }
 
-func DelTalkTweets(r render.Render, db gorm.DB, params martini.Params){
-	talkId := params["talkId"]
+func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
+	talkId := req.FormValue("talkId")
 	var tweets Tweets
 
 	db.Where("talk_id = ?", talkId).Find(&tweets)
