@@ -3,32 +3,36 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"runtime"
 	"fmt"
+	"github.com/jinzhu/gorm"
 )
 
 // TalkController is controller of talk.
 type TalkController struct {
 	Talk Talk
 	Seq int
+	db *gorm.DB
 }
 
 // NewTalkController is constructor of TalkController.
-func NewTalkController(talk Talk)*TalkController{
+func NewTalkController(talk Talk, db *gorm.DB)*TalkController{
 	return &TalkController{
 		Talk:talk,
 		Seq:0,
+		db:db,
 	}
 }
 
 // PostOne posts one tweet and inclement sequence.
 func (tc *TalkController) PostOne() (Tweets, error){
 
-	finishCh := make(chan bool, runtime.NumCPU())
-	errCh := make(chan error, runtime.NumCPU())
-	numTweet := len(tc.Talk.Tweets[tc.Seq])
 
+
+	numTweet := len(tc.Talk.Tweets[tc.Seq])
+	resultCh := make(chan Tweet, numTweet)
+	errCh := make(chan error, runtime.NumCPU())
 
 	for _,v  := range tc.Talk.Tweets[tc.Seq]{
-		go postTweet(v, finishCh, errCh)
+		go postTweet(v, resultCh, errCh)
 	}
 
 	count := 0
@@ -36,7 +40,8 @@ func (tc *TalkController) PostOne() (Tweets, error){
 	L1:
 	for{
 		select {
-		case <-finishCh:
+		case result := <-resultCh:
+			tc.db.Save(result)
 			count++
 			if count == numTweet {
 				break L1
@@ -53,13 +58,15 @@ func (tc *TalkController) PostOne() (Tweets, error){
 	return tc.Talk.Tweets[tc.Seq-1], err
 }
 
-func postTweet(tweet Tweet, resultCh chan bool, errCh chan error) {
+func postTweet(tweet Tweet, resultCh chan Tweet, errCh chan error) {
 	api := anaconda.NewTwitterApi(tweet.Bot.AccessToken, tweet.Bot.AccessTokenSecret)
 
-	_, err := api.PostTweet(tweet.Text, nil)
+	result, err := api.PostTweet(tweet.Text, nil)
 	if err != nil {
 		errCh <- err
 		return
 	}
-	resultCh <- true
+	tweet.TweetId = result.IdStr
+	tweet.Bot = nil
+	resultCh <- tweet
 }

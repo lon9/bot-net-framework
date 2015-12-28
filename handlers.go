@@ -10,6 +10,9 @@ import (
 	"time"
 	"github.com/gorilla/websocket"
 	"log"
+	"github.com/go-martini/martini"
+	"runtime"
+	"fmt"
 )
 
 // Index returns top page.
@@ -95,7 +98,7 @@ func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db g
 		return
 	}
 
-	talkController := NewTalkController(talk)
+	talkController := NewTalkController(talk, &db)
 
 	// Start talk
 	for  range talk.Tweets{
@@ -158,7 +161,7 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 		return
 	}
 
-	talkController := NewTalkController(talk)
+	talkController := NewTalkController(talk, &db)
 
 	for range talk.Tweets{
 		tweets, err := talkController.PostOne()
@@ -172,4 +175,54 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 		}
 		time.Sleep(1*time.Second)
 	}
+}
+
+func DelTalkTweets(r render.Render, db gorm.DB, params martini.Params){
+	talkId := params["id"]
+	var tweets Tweets
+
+	db.Where("talk_id = ?", talkId).Find(&tweets)
+
+	resultCh := make(chan Tweet, len(tweets))
+	errCh := make(chan error, runtime.NumCPU())
+	routineNum := 0
+	for i, _ := range tweets{
+		if tweets[i].TweetId != ""{
+			db.Model(&tweets[i]).Related(&tweets[i].Bot)
+			go deleteTweets(tweets[i], resultCh, errCh)
+			routineNum++
+		}
+	}
+
+	finished := 0
+
+	L:
+	for{
+		select{
+		case result := <- resultCh:
+			finished++
+			db.Save(&result)
+			if finished == routineNum{
+				break L
+			}
+		case err := <- errCh:
+			fmt.Println(err)
+			break L
+		}
+	}
+
+	r.JSON(204, nil)
+}
+
+func deleteTweets(tweet Tweet, resultCh chan Tweet, errCh chan error){
+	api := anaconda.NewTwitterApi(tweet.Bot.AccessToken, tweet.Bot.AccessTokenSecret)
+
+	_, err := api.DeleteTweet(tweet.TweetId, true)
+	if err != nil {
+		errCh <- err
+		return
+	}
+
+	tweet.TweetId = ""
+	resultCh <- tweet
 }

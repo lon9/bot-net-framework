@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa2fefe5-086d-49a4-b994-6cfb212c8fb1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tweet.go" afterPath="$PROJECT_DIR$/tweet.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/handlers.go" afterPath="$PROJECT_DIR$/handlers.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/talk_controller.go" afterPath="$PROJECT_DIR$/talk_controller.go" />
     </list>
     <ignored path="bot-net.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,21 +61,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="handlers.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="handlers.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/handlers.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.78439426">
+              <caret line="204" column="20" selection-start-line="204" selection-start-column="20" selection-end-line="204" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="talk_controller.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="talk_controller.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/talk_controller.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.6632444">
-              <caret line="58" column="5" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -170,11 +171,11 @@
         <option value="$PROJECT_DIR$/public/settings/view/start.html" />
         <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/talk.go" />
-        <option value="$PROJECT_DIR$/handlers.go" />
         <option value="$PROJECT_DIR$/public/settings/script/controller/detail.js" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/tweet.go" />
         <option value="$PROJECT_DIR$/talk_controller.go" />
+        <option value="$PROJECT_DIR$/handlers.go" />
       </list>
     </option>
   </component>
@@ -1039,22 +1040,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/handlers.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="6" selection-start-line="56" selection-start-column="6" selection-end-line="56" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bot.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1079,10 +1064,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="56" column="6" selection-start-line="56" selection-start-column="6" selection-end-line="56" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/talk_controller.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6632444">
-          <caret line="58" column="5" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handlers.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.78439426">
+          <caret line="204" column="20" selection-start-line="204" selection-start-column="20" selection-end-line="204" selection-end-column="20" />
           <folding />
         </state>
       </provider>
