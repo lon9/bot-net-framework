@@ -1,5 +1,5 @@
 angular.module('bot-net')
-.controller('TalkController', function($scope, $mdDialog, $state, TalkService){
+.controller('TalkController', function($scope, $mdDialog, $state, $resource, $mdToast, TalkService){
     var page = 1;
     var maxResults = 40;
     $scope.talks = TalkService.query({page:page, maxResults: maxResults});
@@ -31,6 +31,26 @@ angular.module('bot-net')
                     id: data.id
                 });
            });
+        });
+    };
+
+    // Delete tweets of the talk
+    $scope.deleteTweet = function(talkId){
+        var DelResource = $resource('/api/');
+        DelResource.remove({
+            talkId: talkId
+        }, {}, function(data){
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent('Deleted tweets')
+                    .position({
+                        top: true,
+                        bottom: false,
+                        right: true,
+                        left: false
+                    })
+                    .hideDelay(3000)
+            );
         });
     };
 });

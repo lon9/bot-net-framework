@@ -166,6 +166,8 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 	for range talk.Tweets{
 		tweets, err := talkController.PostOne()
 		if err != nil {
+			fmt.Println(err)
+			r.JSON(400, Error{400, err})
 			return
 		}
 		for _, v := range tweets{
@@ -187,7 +189,7 @@ func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
 	errCh := make(chan error, runtime.NumCPU())
 	routineNum := 0
 	for i, _ := range tweets{
-		if tweets[i].TweetId != ""{
+		if tweets[i].TweetIdStr != ""{
 			db.Model(&tweets[i]).Related(&tweets[i].Bot)
 			go deleteTweets(tweets[i], resultCh, errCh)
 			routineNum++
@@ -208,6 +210,10 @@ func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
 		case err := <- errCh:
 			fmt.Println(err)
 			break L
+		default:
+			if finished == routineNum{
+				break L
+			}
 		}
 	}
 
@@ -217,7 +223,7 @@ func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
 func deleteTweets(tweet Tweet, resultCh chan Tweet, errCh chan error){
 	api := anaconda.NewTwitterApi(tweet.Bot.AccessToken, tweet.Bot.AccessTokenSecret)
 
-	tweetIdInt, err := strconv.ParseInt(tweet.TweetId, 10, 64)
+	tweetIdInt, err := strconv.ParseInt(tweet.TweetIdStr, 10, 64)
 	if err != nil {
 		errCh <- err
 		return
@@ -229,6 +235,6 @@ func deleteTweets(tweet Tweet, resultCh chan Tweet, errCh chan error){
 		return
 	}
 
-	tweet.TweetId = ""
+	tweet.TweetIdStr = ""
 	resultCh <- tweet
 }

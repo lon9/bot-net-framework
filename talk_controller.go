@@ -47,7 +47,6 @@ func (tc *TalkController) PostOne() (Tweets, error){
 				break L1
 			}
 		case err = <-errCh:
-			fmt.Println(err)
 			break L1
 		default:
 		}
@@ -66,7 +65,7 @@ func postTweet(tweet Tweet, resultCh chan Tweet, errCh chan error) {
 		errCh <- err
 		return
 	}
-	tweet.TweetId = result.IdStr
+	tweet.TweetIdStr = result.IdStr
 	tweet.Bot = Bot{}
 	resultCh <- tweet
 }

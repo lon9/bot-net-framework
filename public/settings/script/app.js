@@ -5,7 +5,8 @@ angular.module('bot-net',
         'ui.router',
         'md.data.table'
     ])
-    .config(function($stateProvider, $urlRouterProvider){
+    .config(function($stateProvider, $urlRouterProvider, $resourceProvider){
+        $resourceProvider.defaults.stripTrailingSlashes = false;
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
