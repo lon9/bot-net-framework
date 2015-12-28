@@ -95,8 +95,13 @@ func main(){
 			m.Delete("/:id", DeleteTweet)
 		})
 
+		// Start talk on CLI.
 		m.Get("/", StartTalk)
+
+		//Start talk on Web browser with WebSocket
 		m.Get("/ws", StartTalkSocket)
+
+		// Delete tweets of a talk from Twitter.
 		m.Delete("/", DelTalkTweets)
 	})
 
