@@ -2,7 +2,6 @@ package main
 import (
 	"github.com/ChimeraCoder/anaconda"
 	"runtime"
-	"fmt"
 	"github.com/jinzhu/gorm"
 )
 
@@ -58,6 +57,9 @@ func (tc *TalkController) PostOne() (Tweets, error){
 }
 
 func postTweet(tweet Tweet, resultCh chan Tweet, errCh chan error) {
+
+	// This function is for posting tweet asynchronously
+
 	api := anaconda.NewTwitterApi(tweet.Bot.AccessToken, tweet.Bot.AccessTokenSecret)
 
 	result, err := api.PostTweet(tweet.Text, nil)

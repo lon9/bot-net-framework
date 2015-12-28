@@ -13,6 +13,7 @@ import (
 	"runtime"
 	"fmt"
 	"strconv"
+	"errors"
 )
 
 // Index returns top page.
@@ -78,35 +79,31 @@ func TwitterCallback(r render.Render, s sessions.Session, req *http.Request, db 
 
 // StartTalk starts talk with Json based API.
 func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db gorm.DB){
+
+	// Getting talk name from query string.
 	talkName := req.FormValue("talkName")
 	if talkName == ""{
 		r.JSON(400, Error{400, "talkName must be set."})
 		return
 	}
 
-	var talk Talk
-	db.Where("title = ?", talkName).First(&talk)
-	db.Model(&talk).Order("sequence", true).Related(&talk.Tweets)
-	for i, _ := range talk.Tweets{
-		for j, _ := range talk.Tweets{
-			db.Model(&talk.Tweets[i][j]).Related(&talk.Tweets[i][j].Bot)
-		}
-	}
-
-	if talk.ID == 0{
-		r.JSON(400, Error{404, "Talk not found."})
+	// Getting talk from database.
+	talk, err := getTalkFromDB(talkName, &db)
+	if err != nil {
+		r.JSON(400, err)
 		return
 	}
 
-	talkController := NewTalkController(talk, &db)
 
-	// Start talk
+	// Start talk.
+	talkController := NewTalkController(talk, &db)
 	for  range talk.Tweets{
 		_, err := talkController.PostOne()
 		if err != nil {
-			r.JSON(400, Error{400, err})
+			r.JSON(400, err)
 			break
 		}
+		time.Sleep(1*time.Second)
 	}
 
 	r.JSON(200, talk)
@@ -115,6 +112,14 @@ func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db g
 // StartTalkSocket is websocket for talking in Web UI.
 func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, db gorm.DB){
 
+	// Getting talk name from query string
+	talkName := req.FormValue("talkName")
+	if talkName == ""{
+		r.JSON(400, Error{400, "talkName must be set."})
+		return
+	}
+
+	// Upgrading connection to WebSocket.
 	ws, err := websocket.Upgrade(w, req, nil, 1024, 1024)
 	if _, ok := err.(websocket.HandshakeError); ok {
 		http.Error(w, "Not a websocket handshake", 400)
@@ -124,17 +129,43 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 		return
 	}
 
-
-	talkName := req.FormValue("talkName")
-	if talkName == ""{
-		r.JSON(400, Error{400, "talkName must be set."})
+	// Getting talk from database.
+	talk, err := getTalkFromDB(talkName, &db)
+	if err != nil {
+		r.JSON(400, err)
 		return
 	}
 
+	// Posting tweets
+	talkController := NewTalkController(talk, &db)
+	for range talk.Tweets{
+		tweets, err := talkController.PostOne()
+		if err != nil {
+			fmt.Println(err)
+			r.JSON(400, err)
+			return
+		}
+		for _, v := range tweets{
+			if err := ws.WriteJSON(v); err != nil{
+				r.JSON(400, Error{400,"Cant send message."})
+			}
+		}
+		time.Sleep(1*time.Second)
+	}
+}
+
+func getTalkFromDB(talkName string, db *gorm.DB) (talk Talk, err error){
+
+	// Utility function to get talk by talk name.
+
 	// Getting talk
-	var talk Talk
 	db.Where("title = ?", talkName).First(&talk)
 
+	// If talk was not found return 400 error.
+	if talk.ID == 0{
+		err = errors.New("Talk was not found")
+		return
+	}
 	var tweets Tweets
 
 	// Getting tweet sorted by sequence.
@@ -157,29 +188,11 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 		}
 	}
 
-	if talk.ID == 0{
-		r.JSON(400, Error{404, "Talk not found."})
-		return
-	}
+	return
 
-	talkController := NewTalkController(talk, &db)
-
-	for range talk.Tweets{
-		tweets, err := talkController.PostOne()
-		if err != nil {
-			fmt.Println(err)
-			r.JSON(400, Error{400, err})
-			return
-		}
-		for _, v := range tweets{
-			if err := ws.WriteJSON(v); err != nil{
-				r.JSON(400, Error{400,"Cant send message."})
-			}
-		}
-		time.Sleep(1*time.Second)
-	}
 }
 
+// DelTalkTweets delete tweets of a talk from Twitter
 func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
 	talkId := req.FormValue("talkId")
 	var tweets Tweets
@@ -222,20 +235,27 @@ func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
 }
 
 func deleteTweets(tweet Tweet, resultCh chan Tweet, errCh chan error){
+
+	// This function is for removing tweets asynchronously.
+
 	api := anaconda.NewTwitterApi(tweet.Bot.AccessToken, tweet.Bot.AccessTokenSecret)
 
+
+	// Converting TweetIdStr to int64.
 	tweetIdInt, err := strconv.ParseInt(tweet.TweetIdStr, 10, 64)
 	if err != nil {
 		errCh <- err
 		return
 	}
 
+	// Request Api to remove tweet from Twitter.
 	_, err = api.DeleteTweet(tweetIdInt, true)
 	if err != nil {
 		errCh <- err
 		return
 	}
 
+	// Resetting tweet id.
 	tweet.TweetIdStr = ""
 	resultCh <- tweet
 }
