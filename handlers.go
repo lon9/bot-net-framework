@@ -104,6 +104,7 @@ func StartTalk(r render.Render, req *http.Request, res http.ResponseWriter, db g
 	for  range talk.Tweets{
 		_, err := talkController.PostOne()
 		if err != nil {
+			r.JSON(400, Error{400, err})
 			break
 		}
 	}
