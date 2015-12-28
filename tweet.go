@@ -18,6 +18,7 @@ type Tweet struct  {
 	TalkID   int `json:"talkId" sql:"index"`
 	Sequence  int `json:"sequence"`
 	Text      string `json:"text" sql:"type:text"`
+	TweetIdStr string `json:"tweetIdStr"`
 }
 
 // Tweets is array of Tweet.

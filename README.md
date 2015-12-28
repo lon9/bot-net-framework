@@ -15,6 +15,9 @@ go build
 
 Open browser and access the port number we decided in options.
 
+And alse, we can start discussion on CLI   
+Requesting URL `localhost:<port-number>/api/?talkName=<talk-name>`, and then bots will start talk.
+
 ##Optinons
 
 
@@ -26,7 +29,7 @@ Open browser and access the port number we decided in options.
 -o, --dboptions= Database options (See https://github.com/jinzhu/gorm#initialize-database)
 ```
 
-And we can configure these options from environment valuables.
+And we can also configure these options from environment valuables.
 
 ```
 BN_PORT                 Port number
