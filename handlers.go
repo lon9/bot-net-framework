@@ -178,7 +178,7 @@ func StartTalkSocket(r render.Render, w http.ResponseWriter, req *http.Request, 
 }
 
 func DelTalkTweets(r render.Render, db gorm.DB, params martini.Params){
-	talkId := params["id"]
+	talkId := params["talkId"]
 	var tweets Tweets
 
 	db.Where("talk_id = ?", talkId).Find(&tweets)
