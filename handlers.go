@@ -173,15 +173,12 @@ func getTalkFromDB(talkName string, db *gorm.DB) (talk Talk, err error){
 	talk.Tweets = make([]Tweets, len(tweets))
 	index  := -1
 	prevSeq := 0
-	var prevBot Bot
 	for _, v := range tweets{
+		db.Model(&v).Related(&v.Bot)
 		if v.Sequence == prevSeq {
-			v.Bot = prevBot
 			talk.Tweets[index] = append(talk.Tweets[index], v)
 		}else{
 			index++
-			db.Model(&v).Related(&prevBot)
-			v.Bot = prevBot
 			talk.Tweets[index] = make(Tweets, 0)
 			talk.Tweets[index] = append(talk.Tweets[index], v)
 			prevSeq = v.Sequence
@@ -222,8 +219,11 @@ func DelTalkTweets(r render.Render, db gorm.DB, req *http.Request){
 				break L
 			}
 		case err := <- errCh:
+			finished++
 			fmt.Println(err)
-			break L
+			if finished == routineNum{
+				break L
+			}
 		default:
 			if finished == routineNum{
 				break L
