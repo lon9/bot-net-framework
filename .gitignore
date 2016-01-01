@@ -27,4 +27,5 @@ _testmain.go
 bot-net-framework
 bower_components
 
+.idea/
 .idea/workscape.xml
