@@ -6,7 +6,6 @@ All we have to do is just registering bots and configuring communications with W
 and then we can start communication on the web UI or CLI such as `curl`.
 
 ![example image1](https://bot.gyazo.com/2f08b8e61ecfff07f77f388dec11927a.gif "Exanple1")
-![example image2](https://bot.gyazo.com/ecfd0b1bf0bfe62e8643e1129ea41b9a.gif "Example2")
 
 ##Usage
 
