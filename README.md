@@ -1,4 +1,4 @@
-#Bot Net Framework
+# Bot Net Framework
 
 Bot Net Framework is not malware framework, it is "Twitter" Bot Net Framework.   
 We can create network of Twitter bots. This makes easy to communicate with bots.   
@@ -7,7 +7,7 @@ and then we can start communication on the web UI or CLI such as `curl`.
 
 ![example image1](https://bot.gyazo.com/2f08b8e61ecfff07f77f388dec11927a.gif "Exanple1")
 
-##Usage
+## Usage
 
 ```
 go get github.com/Rompei/bot-net-framework
@@ -20,7 +20,7 @@ Open browser and access the port number we decided in options.
 And alse, we can start discussion on CLI   
 Requesting URL `localhost:<port-number>/api/?talkName=<talk-name>`, and then bots will start talk.
 
-##Optinons
+## Optinons
 
 
 ```
